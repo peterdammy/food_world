@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:food_world/views/styles/font_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_world/views/screens/home_screen.dart';
+import 'package:food_world/views/screens/onboard/onboard_screen.dart';
+import 'package:food_world/views/styles/font_styles.dart';
 
-class OnboardScreen extends StatefulWidget {
-  const OnboardScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<OnboardScreen> createState() => _OnboardScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _OnboardScreenState extends State<OnboardScreen> {
-  final TextEditingController usernameController = TextEditingController();
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
@@ -26,7 +28,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
               children: [
                 52.verticalSpace,
                 Text(
-                  'Welcome',
+                  'Register',
                   style: FontStyles.largerText(
                     Theme.of(context).colorScheme.secondary,
                   ),
@@ -46,10 +48,10 @@ class _OnboardScreenState extends State<OnboardScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Username', style: FontStyles.textfieldText),
+                    Text('Email', style: FontStyles.textfieldText),
                     10.verticalSpace,
                     TextFormField(
-                      controller: usernameController,
+                      controller: emailController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Theme.of(context).colorScheme.primary,
@@ -83,11 +85,6 @@ class _OnboardScreenState extends State<OnboardScreen> {
                         ),
                       ),
                     ),
-                    10.verticalSpace,
-                    Text(
-                      'Forgot Password? Need help sign in',
-                      style: FontStyles.loginhintText,
-                    ),
                   ],
                 ),
                 24.verticalSpace,
@@ -98,39 +95,37 @@ class _OnboardScreenState extends State<OnboardScreen> {
                     borderRadius: BorderRadius.circular(20).r,
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Login',
-                      style: FontStyles.mediumText(
-                        Theme.of(context).colorScheme.surface,
-                      ),
-                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    },
+
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(Colors.green),
                     ),
-                  ),
-                ),
-                10.verticalSpace,
-                Container(
-                  height: 57.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20).r,
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {},
                     child: Text(
-                      'Register',
+                      'Continue',
                       style: FontStyles.mediumText(
                         Theme.of(context).colorScheme.surface,
                       ),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.green),
                     ),
                   ),
                 ),
                 20.verticalSpace,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OnboardScreen()),
+                    );
+                  },
+                  child: Text(
+                    'Have an account already? Click',
+                    style: FontStyles.loginhintText,
+                  ),
+                ),
               ],
             ),
           ),

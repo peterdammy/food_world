@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "749233628078",
+    "project_id": "foodworld-f2b9a",
+    "storage_bucket": "foodworld-f2b9a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:749233628078:android:469468ba0eaed058e8de3f",
+        "android_client_info": {
+          "package_name": "com.example.food_world"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAthkMC8oehkQVxBSdUXfh5ZPx6xZ1FaPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -21,6 +21,12 @@ class FontStyles {
     color: textColor,
   );
 
+  static TextStyle medium2Text(Color textColor) => GoogleFonts.play(
+    fontSize: 24.r,
+    fontWeight: FontWeight.w800,
+    color: textColor,
+  );
+
   static TextStyle smallText(Color textColor) => GoogleFonts.play(
     fontSize: 18.r,
     fontWeight: FontWeight.w500,
