@@ -38,6 +38,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_riverpod: ^2.6.1
   firebase_core: ^3.13.0
+  firebase_auth: ^5.3.0
 
 dev_dependencies:
   flutter_test:

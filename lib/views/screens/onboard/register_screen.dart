@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_world/provider/auth_provider.dart';
 import 'package:food_world/views/screens/home_screen.dart';
 import 'package:food_world/views/screens/onboard/onboard_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -95,11 +97,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(20).r,
                   ),
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                    onPressed: () async {
+                      final email = emailController.text.trim();
+                      final password = passwordController.text;
+
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Center(child: CircularProgressIndicator());
+                        },
                       );
+
+                      if (email.isEmpty || password.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Please fill in both fields")),
+                        );
+                        return;
+                      }
+
+                      // if (password != confirmPassword) {
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(content: Text("Passwords do not match")),
+                      //   );
+                      //   return;
+                      // }
+
+                      final errorMessage = await ref
+                          .read(authServiceProvider)
+                          .signUpWithEmail(email, password);
+
+                      Navigator.pop(context);
+
+                      if (errorMessage == null) {
+                        // Success
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                        );
+                      } else {
+                        // Show specific error message
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(errorMessage)));
+                      }
                     },
 
                     style: ButtonStyle(
