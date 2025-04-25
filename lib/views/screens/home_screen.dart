@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_world/provider/auth_provider.dart';
 import 'package:food_world/provider/theme_provider.dart';
+import 'package:food_world/views/screens/onboard/onboard_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -31,19 +33,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Theme.of(context).colorScheme.secondary,
                     ),
                   ),
-                  CircleAvatar(
-                    radius: 26.r,
-                    backgroundImage: AssetImage('assets/images/avatar.png'),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      ref.read(themeProvider.notifier).toggleTheme();
-                    },
-                    icon: Icon(
-                      Icons.switch_right,
-                      size: 30,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 26.r,
+                        backgroundImage: AssetImage('assets/images/avatar.png'),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          ref.read(themeProvider.notifier).toggleTheme();
+                        },
+                        icon: Icon(
+                          Icons.brightness_6,
+                          size: 30,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          ref.read(authServiceProvider).signOut();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OnboardScreen(),
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.logout,
+                          size: 30,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

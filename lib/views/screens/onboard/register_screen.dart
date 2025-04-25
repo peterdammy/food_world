@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_world/provider/auth_provider.dart';
+import 'package:food_world/repo/internet_repo.dart';
 import 'package:food_world/views/screens/home_screen.dart';
 import 'package:food_world/views/screens/onboard/onboard_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
@@ -87,9 +88,24 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         ),
                       ),
                     ),
+                    20.verticalSpace,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OnboardScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Have an account already? Click',
+                        style: FontStyles.loginhintText,
+                      ),
+                    ),
                   ],
                 ),
-                24.verticalSpace,
+                20.verticalSpace,
                 Container(
                   height: 57.h,
                   width: double.infinity,
@@ -109,11 +125,29 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       );
 
                       if (email.isEmpty || password.isEmpty) {
+                        Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Please fill in both fields")),
+                          SnackBar(
+                            elevation: 2.h,
+                            showCloseIcon: true,
+                            closeIconColor: Colors.red,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            content: Text(
+                              "Please fill in both fields",
+                              style: FontStyles.loginhintText,
+                            ),
+                          ),
                         );
                         return;
                       }
+
+                      // final internetAvailable = await connectedToInternet();
+                      // if (!internetAvailable) {
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(content: Text('No Internet Connection')),
+                      //   );
+                      // }
 
                       // if (password != confirmPassword) {
                       //   ScaffoldMessenger.of(context).showSnackBar(
@@ -129,6 +163,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       Navigator.pop(context);
 
                       if (errorMessage == null) {
+                        Navigator.pop(context);
                         // Success
                         Navigator.pushReplacement(
                           context,
@@ -138,9 +173,19 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         );
                       } else {
                         // Show specific error message
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(errorMessage)));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            elevation: 2.h,
+                            showCloseIcon: true,
+                            closeIconColor: Colors.red,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            content: Text(
+                              errorMessage,
+                              style: FontStyles.loginhintText,
+                            ),
+                          ),
+                        );
                       }
                     },
 
@@ -150,22 +195,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     child: Text(
                       'Continue',
                       style: FontStyles.mediumText(
-                        Theme.of(context).colorScheme.surface,
+                        Theme.of(context).colorScheme.secondary,
                       ),
                     ),
-                  ),
-                ),
-                20.verticalSpace,
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => OnboardScreen()),
-                    );
-                  },
-                  child: Text(
-                    'Have an account already? Click',
-                    style: FontStyles.loginhintText,
                   ),
                 ),
               ],

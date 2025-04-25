@@ -1,10 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepository {
   FirebaseAuth firebaseAuth;
   AuthRepository({required this.firebaseAuth});
-
-  Stream<User?> get authStateChanges => firebaseAuth.authStateChanges();
 
   Future<String?> signUpWithEmail(String email, String password) async {
     try {
@@ -12,7 +12,7 @@ class AuthRepository {
         email: email,
         password: password,
       );
-      return 'Sign Up Successful'; // sign uP
+      return null; // success
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         return 'This email is already in use.';
@@ -28,16 +28,16 @@ class AuthRepository {
     }
   }
 
-  Future<String?> signInWithEmail(String email, String password) async {
+  Future<User?> signInWithEmail(String email, String password) async {
     try {
-      await firebaseAuth.signInWithEmailAndPassword(
+      final result = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return 'Login Successful';
+      return result.user;
     } on FirebaseAuthException catch (e) {
       // Optional: log or handle different error codes
-      return e.message;
+      return null;
     }
   }
 

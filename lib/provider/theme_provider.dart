@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ThemeProvider extends ChangeNotifier {
-  ThemeMode themeMode = ThemeMode.light;
+final themeProvider = ChangeNotifierProvider<ThemeNotifier>(
+  (ref) => ThemeNotifier(),
+);
 
-  void toggleTheme() {
-    themeMode = _ontoggleTheme(themeMode);
-    // print('theme toggled to $themeMode');
+class ThemeNotifier extends ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode get themeMode => _themeMode;
+
+  ThemeNotifier() {
+    _loadTheme();
+  }
+
+  void _loadTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isDark = prefs.getBool('isDarkTheme') ?? false;
+    _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
     notifyListeners();
   }
 
-  ThemeMode _ontoggleTheme(ThemeMode themeMode) {
-    switch (themeMode) {
-      case ThemeMode.dark:
-        return ThemeMode.light;
-      case ThemeMode.light:
-        return ThemeMode.dark;
-      default:
-        return ThemeMode.light;
+  void toggleTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (_themeMode == ThemeMode.dark) {
+      _themeMode = ThemeMode.light;
+      await prefs.setBool('isDarkTheme', false);
+    } else {
+      _themeMode = ThemeMode.dark;
+      await prefs.setBool('isDarkTheme', true);
     }
+    notifyListeners();
   }
 }
-
-final themeProvider = ChangeNotifierProvider((ref) => ThemeProvider());
