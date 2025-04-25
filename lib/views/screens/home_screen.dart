@@ -5,6 +5,8 @@ import 'package:food_world/provider/auth_provider.dart';
 import 'package:food_world/provider/theme_provider.dart';
 import 'package:food_world/views/screens/onboard/onboard_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
+import 'package:food_world/views/widgets/custom_tab_content.dart';
+import 'package:food_world/views/widgets/custom_tab_widgets.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -16,60 +18,120 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0).r,
-          child: Column(
-            children: [
-              24.verticalSpace,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Hi, Guest',
-                    style: FontStyles.medium2Text(
-                      Theme.of(context).colorScheme.secondary,
+    return DefaultTabController(
+      length: 7,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0).r,
+            child: Column(
+              children: [
+                24.verticalSpace,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Hi, Guest',
+                      style: FontStyles.medium2Text(
+                        Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 26.r,
-                        backgroundImage: AssetImage('assets/images/avatar.png'),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          ref.read(themeProvider.notifier).toggleTheme();
-                        },
-                        icon: Icon(
-                          Icons.brightness_6,
-                          size: 30,
-                          color: Theme.of(context).colorScheme.secondary,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CircleAvatar(
+                          radius: 26.r,
+                          backgroundImage: AssetImage(
+                            'assets/images/avatar.png',
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          ref.read(authServiceProvider).signOut();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OnboardScreen(),
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.logout,
-                          size: 30,
-                          color: Theme.of(context).colorScheme.secondary,
+                        IconButton(
+                          onPressed: () {
+                            ref.read(themeProvider.notifier).toggleTheme();
+                          },
+                          icon: Icon(
+                            Icons.brightness_6,
+                            size: 30,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                        IconButton(
+                          onPressed: () {
+                            ref.read(authServiceProvider).signOut();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OnboardScreen(),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.logout,
+                            size: 30,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                16.verticalSpace,
+                CustomTabBar(),
+                20.verticalSpace,
+                CustomTabContent(),
+                // TabBar(
+                //   isScrollable: true,
+                //   labelPadding:
+                //       EdgeInsets.only(left: 16, bottom: 8, right: 12).r,
+                //   tabAlignment: TabAlignment.start,
+                //   tabs: [
+                //     Text(
+                //       'Recommended',
+                //       style: FontStyles.smallText(
+                //         Theme.of(context).colorScheme.secondary,
+                //       ),
+                //     ),
+                //     Text(
+                //       'Vegan',
+                //       style: FontStyles.smallText(
+                //         Theme.of(context).colorScheme.secondary,
+                //       ),
+                //     ),
+                //     Text(
+                //       'Junk Food',
+                //       style: FontStyles.smallText(
+                //         Theme.of(context).colorScheme.secondary,
+                //       ),
+                //     ),
+                //     Text(
+                //       'Beverages',
+                //       style: FontStyles.smallText(
+                //         Theme.of(context).colorScheme.secondary,
+                //       ),
+                //     ),
+                //     Text(
+                //       'Sandwich',
+                //       style: FontStyles.smallText(
+                //         Theme.of(context).colorScheme.secondary,
+                //       ),
+                //     ),
+                //     Text(
+                //       'Pizza',
+                //       style: FontStyles.smallText(
+                //         Theme.of(context).colorScheme.secondary,
+                //       ),
+                //     ),
+                //     Text(
+                //       'Desserts',
+                //       style: FontStyles.smallText(
+                //         Theme.of(context).colorScheme.secondary,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+              ],
+            ),
           ),
         ),
       ),
