@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_world/views/styles/font_styles.dart';
+import 'package:food_world/views/widgets/recommended_carousel.dart';
 
 class RecommendedScreen extends StatefulWidget {
   const RecommendedScreen({super.key});
@@ -11,6 +13,6 @@ class RecommendedScreen extends StatefulWidget {
 class _RecommendedScreenState extends State<RecommendedScreen> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Recommended', style: FontStyles.textfieldText));
+    return Column(children: [RecommendedCarousel()]);
   }
 }

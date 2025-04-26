@@ -52,7 +52,7 @@ class CustomTabBar extends ConsumerWidget {
                 ),
                 child: Text(
                   tabs[index],
-                  style: FontStyles.smallBoldText(
+                  style: FontStyles.smallerBoldText(
                     isSelected
                         ? Theme.of(context).colorScheme.onPrimary
                         : Theme.of(context).colorScheme.secondary,

@@ -33,14 +33,26 @@ class FontStyles {
     color: textColor,
   );
 
-  static TextStyle smallBoldText(Color textColor) => GoogleFonts.play(
-    fontSize: 18.r,
+  static TextStyle smallBoldText = GoogleFonts.play(
+    fontSize: 16.r,
+    fontWeight: FontWeight.w800,
+    color: Colors.white,
+  );
+
+  static TextStyle smallerBoldText(Color textColor) => GoogleFonts.play(
+    fontSize: 16.r,
     fontWeight: FontWeight.w800,
     color: textColor,
   );
 
   static TextStyle smallerText(Color textColor) => GoogleFonts.play(
     fontSize: 14.r,
+    fontWeight: FontWeight.w400,
+    color: textColor,
+  );
+
+  static TextStyle smallestText(Color textColor) => GoogleFonts.play(
+    fontSize: 10.r,
     fontWeight: FontWeight.w400,
     color: textColor,
   );
