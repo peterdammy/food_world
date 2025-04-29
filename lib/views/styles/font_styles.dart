@@ -33,6 +33,12 @@ class FontStyles {
     color: textColor,
   );
 
+  static TextStyle smallboldText(Color textColor) => GoogleFonts.play(
+    fontSize: 18.r,
+    fontWeight: FontWeight.w900,
+    color: textColor,
+  );
+
   static TextStyle smallBoldText = GoogleFonts.play(
     fontSize: 16.r,
     fontWeight: FontWeight.w800,

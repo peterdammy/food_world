@@ -36,36 +36,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Theme.of(context).colorScheme.secondary,
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileScreen(),
-                              ),
-                            );
-                          },
-                          child: CircleAvatar(
-                            radius: 26.r,
-                            backgroundImage: AssetImage(
-                              'assets/images/avatar.png',
-                            ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            ref.read(themeProvider.notifier).toggleTheme();
-                          },
-                          icon: Icon(
-                            Icons.brightness_6,
-                            size: 30,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                      ],
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 26.r,
+                        backgroundImage: AssetImage('assets/images/avatar.png'),
+                      ),
                     ),
                   ],
                 ),

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_world/provider/auth_provider.dart';
 import 'package:food_world/provider/auth_user_provider.dart';
 import 'package:food_world/provider/profile_provider.dart';
+import 'package:food_world/provider/theme_provider.dart';
 import 'package:food_world/views/screens/onboard/onboard_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 
@@ -153,6 +154,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       );
                     },
+                  ),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    ref.read(themeProvider.notifier).toggleTheme();
+                  },
+                  child: Text(
+                    'Switch Mode',
+                    style: FontStyles.smallerText(
+                      Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ),
               ),
