@@ -21,6 +21,61 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final userEmail = ref.watch(authUserProvider).value;
     final profileOptionsList = ref.watch(profileOptionsProvider);
+
+    void _showLogoutDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.green,
+            title: Text(
+              'You Sure You want to Logout',
+              style: FontStyles.medium2Text(
+                Theme.of(context).colorScheme.surface,
+              ),
+            ),
+            content: Text(
+              'We will miss your hunger',
+              style: FontStyles.smallText(
+                Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20).r, // Rounded edges
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  ref.read(authServiceProvider).signOut();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OnboardScreen()),
+                  );
+                },
+                child: Text(
+                  'Yes',
+                  style: FontStyles.smallText(
+                    Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'No',
+                  style: FontStyles.smallText(
+                    Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
@@ -58,13 +113,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
                   GestureDetector(
                     onTap: () {
-                      ref.read(authServiceProvider).signOut();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OnboardScreen(),
-                        ),
-                      );
+                      return _showLogoutDialog(context);
                     },
                     child: Row(
                       children: [

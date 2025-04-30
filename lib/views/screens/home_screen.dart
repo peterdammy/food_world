@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:food_world/provider/theme_provider.dart';
 import 'package:food_world/views/screens/profile_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 import 'package:food_world/views/widgets/custom_tab_content.dart';
