@@ -21,91 +21,95 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0).r,
-            child: Column(
-              children: [
-                24.verticalSpace,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Hi, Guest',
-                      style: FontStyles.medium2Text(
-                        Theme.of(context).colorScheme.secondary,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0).r,
+              child: Column(
+                children: [
+                  24.verticalSpace,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Hi, Guest',
+                        style: FontStyles.medium2Text(
+                          Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileScreen(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfileScreen(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 26.r,
+                          backgroundImage: AssetImage(
+                            'assets/images/avatar.png',
                           ),
-                        );
-                      },
-                      child: CircleAvatar(
-                        radius: 26.r,
-                        backgroundImage: AssetImage('assets/images/avatar.png'),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                16.verticalSpace,
-                CustomTabBar(),
-                20.verticalSpace,
-                CustomTabContent(),
-                // TabBar(
-                //   isScrollable: true,
-                //   labelPadding:
-                //       EdgeInsets.only(left: 16, bottom: 8, right: 12).r,
-                //   tabAlignment: TabAlignment.start,
-                //   tabs: [
-                //     Text(
-                //       'Recommended',
-                //       style: FontStyles.smallText(
-                //         Theme.of(context).colorScheme.secondary,
-                //       ),
-                //     ),
-                //     Text(
-                //       'Vegan',
-                //       style: FontStyles.smallText(
-                //         Theme.of(context).colorScheme.secondary,
-                //       ),
-                //     ),
-                //     Text(
-                //       'Junk Food',
-                //       style: FontStyles.smallText(
-                //         Theme.of(context).colorScheme.secondary,
-                //       ),
-                //     ),
-                //     Text(
-                //       'Beverages',
-                //       style: FontStyles.smallText(
-                //         Theme.of(context).colorScheme.secondary,
-                //       ),
-                //     ),
-                //     Text(
-                //       'Sandwich',
-                //       style: FontStyles.smallText(
-                //         Theme.of(context).colorScheme.secondary,
-                //       ),
-                //     ),
-                //     Text(
-                //       'Pizza',
-                //       style: FontStyles.smallText(
-                //         Theme.of(context).colorScheme.secondary,
-                //       ),
-                //     ),
-                //     Text(
-                //       'Desserts',
-                //       style: FontStyles.smallText(
-                //         Theme.of(context).colorScheme.secondary,
-                //       ),
-                //     ),
-                //   ],
-                // ),
-              ],
+                    ],
+                  ),
+                  16.verticalSpace,
+                  CustomTabBar(),
+                  20.verticalSpace,
+                  CustomTabContent(),
+                  // TabBar(
+                  //   isScrollable: true,
+                  //   labelPadding:
+                  //       EdgeInsets.only(left: 16, bottom: 8, right: 12).r,
+                  //   tabAlignment: TabAlignment.start,
+                  //   tabs: [
+                  //     Text(
+                  //       'Recommended',
+                  //       style: FontStyles.smallText(
+                  //         Theme.of(context).colorScheme.secondary,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       'Vegan',
+                  //       style: FontStyles.smallText(
+                  //         Theme.of(context).colorScheme.secondary,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       'Junk Food',
+                  //       style: FontStyles.smallText(
+                  //         Theme.of(context).colorScheme.secondary,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       'Beverages',
+                  //       style: FontStyles.smallText(
+                  //         Theme.of(context).colorScheme.secondary,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       'Sandwich',
+                  //       style: FontStyles.smallText(
+                  //         Theme.of(context).colorScheme.secondary,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       'Pizza',
+                  //       style: FontStyles.smallText(
+                  //         Theme.of(context).colorScheme.secondary,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       'Desserts',
+                  //       style: FontStyles.smallText(
+                  //         Theme.of(context).colorScheme.secondary,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                ],
+              ),
             ),
           ),
         ),

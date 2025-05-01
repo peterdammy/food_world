@@ -63,6 +63,13 @@ class FontStyles {
     color: textColor,
   );
 
+  static TextStyle smallestItalicText(Color textColor) => GoogleFonts.play(
+    fontSize: 10.r,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.italic,
+    color: textColor,
+  );
+
   static TextStyle textfieldText = GoogleFonts.play(
     fontSize: 24.r,
     fontWeight: FontWeight.w500,
