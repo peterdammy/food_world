@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_world/provider/menu_quantity_provider.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 import 'package:food_world/views/widgets/recommended_carousel.dart';
 
-class RecommendedScreen extends StatefulWidget {
+class RecommendedScreen extends ConsumerStatefulWidget {
   const RecommendedScreen({super.key});
 
   @override
-  State<RecommendedScreen> createState() => _RecommendedScreenState();
+  ConsumerState<RecommendedScreen> createState() => _RecommendedScreenState();
 }
 
-class _RecommendedScreenState extends State<RecommendedScreen> {
+class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
   @override
   Widget build(BuildContext context) {
+    final menuItems = ref.watch(menuProvider);
     return SingleChildScrollView(
       child: Expanded(
         child: Column(
@@ -32,9 +35,10 @@ class _RecommendedScreenState extends State<RecommendedScreen> {
                 SizedBox(
                   height: 600.h,
                   child: ListView.separated(
-                    itemCount: 6,
+                    itemCount: 5,
                     separatorBuilder: (context, index) => 10.verticalSpace,
                     itemBuilder: (context, index) {
+                      final menu = menuItems[index];
                       return Container(
                         height: 65.h,
                         margin: EdgeInsets.symmetric(vertical: 6.h),
@@ -61,13 +65,13 @@ class _RecommendedScreenState extends State<RecommendedScreen> {
                                     ),
                                   ),
                                   Text(
-                                    'Item 1',
+                                    menu.name,
                                     style: FontStyles.smallerBoldText(
                                       Theme.of(context).colorScheme.secondary,
                                     ),
                                   ),
                                   Text(
-                                    '20.00₹',
+                                    "${menu.price.toStringAsFixed(2)} ₹",
                                     style: FontStyles.smallerText(Colors.green),
                                   ),
                                 ],
@@ -79,57 +83,82 @@ class _RecommendedScreenState extends State<RecommendedScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   // crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    CircleAvatar(
-                                      radius: 6.5.r,
-                                      backgroundColor:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.secondary,
-                                      child: Icon(
-                                        Icons.remove,
-                                        size: 8.w,
-                                        color:
+                                    GestureDetector(
+                                      onTap: () {
+                                        ref
+                                            .read(menuProvider.notifier)
+                                            .decreaseQuantity(index);
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 6.5.r,
+                                        backgroundColor:
                                             Theme.of(
                                               context,
-                                            ).colorScheme.surface,
+                                            ).colorScheme.secondary,
+                                        child: Icon(
+                                          Icons.remove,
+                                          size: 8.w,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.surface,
+                                        ),
                                       ),
                                     ),
                                     Text(
-                                      '1',
+                                      '${menu.quantity}',
                                       style: FontStyles.smallerText(
                                         Theme.of(context).colorScheme.secondary,
                                       ),
                                     ),
-                                    CircleAvatar(
-                                      radius: 6.5.r,
-                                      backgroundColor:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.secondary,
-                                      child: Icon(
-                                        Icons.add,
-                                        size: 8.w,
-                                        color:
+                                    GestureDetector(
+                                      onTap: () {
+                                        ref
+                                            .read(menuProvider.notifier)
+                                            .increaseQuantity(index);
+                                      },
+
+                                      child: CircleAvatar(
+                                        radius: 6.5.r,
+                                        backgroundColor:
                                             Theme.of(
                                               context,
-                                            ).colorScheme.surface,
+                                            ).colorScheme.secondary,
+                                        child: Icon(
+                                          Icons.add,
+                                          size: 8.w,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.surface,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                                 10.horizontalSpace,
-                                Container(
-                                  height: 48.h,
-                                  width: 92.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25).r,
-                                    color: Colors.green,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Add',
-                                      style: FontStyles.smallText(
-                                        Theme.of(context).colorScheme.surface,
+                                GestureDetector(
+                                  onTap: () {
+                                    ref
+                                        .read(menuProvider.notifier)
+                                        .toggleAddToCart(index);
+                                  },
+                                  child: Container(
+                                    height: 48.h,
+                                    width: 92.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25).r,
+                                      color:
+                                          menu.isAdded
+                                              ? Colors.red
+                                              : Colors.green,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        menu.isAdded ? 'Remove' : 'Add',
+                                        style: FontStyles.smallText(
+                                          Theme.of(context).colorScheme.surface,
+                                        ),
                                       ),
                                     ),
                                   ),
