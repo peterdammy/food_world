@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_world/provider/menu_quantity_provider.dart';
+import 'package:food_world/views/screens/order_checkout_screen.dart';
 import 'package:food_world/views/screens/profile_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 import 'package:food_world/views/widgets/custom_tab_content.dart';
@@ -113,11 +114,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   children: [
                                     Text(
                                       item.name,
-                                      style: FontStyles.smallText(Colors.white),
+                                      style: FontStyles.smallText(
+                                        Theme.of(context).colorScheme.secondary,
+                                      ),
                                     ),
                                     Text(
                                       "${item.price.toStringAsFixed(2)} ₹",
-                                      style: FontStyles.smallText(Colors.white),
+                                      style: FontStyles.smallText(
+                                        Theme.of(context).colorScheme.secondary,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -142,15 +147,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => OrderCheckoutScreen(),
+                                    ),
+                                  );
+                                },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
                                 ),
                                 child: Text(
                                   "Check Out",
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
+                                  style: FontStyles.smallboldText(
+                                    Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               ),
