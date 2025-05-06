@@ -4,9 +4,13 @@ import 'package:flutter_svg/svg.dart';
 
 class PaymentContainer extends StatelessWidget {
   final String svgPicture;
-  String? svgPicture2;
+  final String svgPicture2;
 
-  PaymentContainer({super.key, required this.svgPicture, this.svgPicture2});
+  const PaymentContainer({
+    super.key,
+    required this.svgPicture,
+    required this.svgPicture2,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class PaymentContainer extends StatelessWidget {
           children: [
             SvgPicture.asset(svgPicture),
             10.horizontalSpace,
-            SvgPicture.asset(svgPicture),
+            SvgPicture.asset(svgPicture2),
           ],
         ),
       ),

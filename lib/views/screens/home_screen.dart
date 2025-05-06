@@ -92,12 +92,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Text(
                               "Your Orders",
                               style: FontStyles.medium2Text(
-                                Theme.of(context).colorScheme.secondary,
+                                Theme.of(context).colorScheme.surface,
                               ),
                             ),
                             Icon(
                               Icons.expand_more,
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.surface,
                             ),
                           ],
                         ),
@@ -115,13 +115,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     Text(
                                       item.name,
                                       style: FontStyles.smallText(
-                                        Theme.of(context).colorScheme.secondary,
+                                        Theme.of(context).colorScheme.surface,
                                       ),
                                     ),
                                     Text(
                                       "${item.price.toStringAsFixed(2)} ₹",
                                       style: FontStyles.smallText(
-                                        Theme.of(context).colorScheme.secondary,
+                                        Theme.of(context).colorScheme.surface,
                                       ),
                                     ),
                                   ],
@@ -162,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: Text(
                                   "Check Out",
                                   style: FontStyles.smallboldText(
-                                    Theme.of(context).colorScheme.secondary,
+                                    Theme.of(context).colorScheme.surface,
                                   ),
                                 ),
                               ),

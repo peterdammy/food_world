@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:food_world/provider/menu_quantity_provider.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 import 'package:food_world/views/widgets/payment_container.dart';
 
-class OrderCheckoutScreen extends StatefulWidget {
+class OrderCheckoutScreen extends ConsumerStatefulWidget {
   const OrderCheckoutScreen({super.key});
 
   @override
-  State<OrderCheckoutScreen> createState() => _OrderCheckoutScreenState();
+  ConsumerState<OrderCheckoutScreen> createState() =>
+      _OrderCheckoutScreenState();
 }
 
-class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
+class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +22,7 @@ class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -67,7 +70,59 @@ class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
                 svgPicture2: 'assets/icon/applepay.svg',
               ),
               16.verticalSpace,
-              PaymentContainer(svgPicture: 'assets/icon/paypal.svg'),
+              PaymentContainer(
+                svgPicture: 'assets/icon/paypal.svg',
+                svgPicture2: '',
+              ),
+              4.verticalSpace,
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  '+ Add other payment methods',
+                  style: FontStyles.loginhintText,
+                ),
+              ),
+              20.verticalSpace,
+              Container(
+                height: 214.h,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(20).r,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0).w,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Order Summary',
+                        style: FontStyles.medium2Text(
+                          Theme.of(context).colorScheme.surface,
+                        ),
+                      ),
+                      12.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Item(s) Subtotal',
+                            style: FontStyles.smallerBoldText(
+                              Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                          Text(
+                            "${ref.watch(menuProvider).where((e) => e.isAdded).fold(0.0, (sum, e) => sum + (e.price * e.quantity))}",
+                            style: FontStyles.smallerBoldText(
+                              Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

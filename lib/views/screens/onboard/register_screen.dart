@@ -67,6 +67,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.green,
+                            width: 1.5.w,
+                          ),
+                        ),
                       ),
                     ),
                     16.verticalSpace,
@@ -85,6 +92,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.green,
+                            width: 1.5.w,
+                          ),
                         ),
                       ),
                     ),
