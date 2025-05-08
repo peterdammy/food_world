@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_world/provider/menu_quantity_provider.dart';
+import 'package:food_world/views/screens/paid_order_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 import 'package:food_world/views/widgets/payment_container.dart';
 
@@ -14,8 +15,16 @@ class OrderCheckoutScreen extends ConsumerStatefulWidget {
 }
 
 class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
+  final deliveryCharge = 30.00;
   @override
   Widget build(BuildContext context) {
+    final cartItems = ref.watch(menuProvider).where((e) => e.isAdded);
+    final subtotal = cartItems.fold(
+      0.0,
+      (sum, e) => sum + (e.price * e.quantity),
+    );
+    final total = subtotal + deliveryCharge;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
@@ -112,7 +121,48 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
                             ),
                           ),
                           Text(
-                            "${ref.watch(menuProvider).where((e) => e.isAdded).fold(0.0, (sum, e) => sum + (e.price * e.quantity))}",
+                            subtotal.toStringAsFixed(2),
+                            style: FontStyles.smallerBoldText(
+                              Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                        ],
+                      ),
+                      16.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Delivery Fee',
+                            style: FontStyles.smallerBoldText(
+                              Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                          Text(
+                            deliveryCharge.toStringAsFixed(2),
+                            style: FontStyles.smallerBoldText(
+                              Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                        ],
+                      ),
+                      16.verticalSpace,
+                      Divider(
+                        thickness: 1.5.h,
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                      16.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total',
+                            style: FontStyles.medium2Text(
+                              Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                          Text(
+                            total.toStringAsFixed(2),
                             style: FontStyles.smallerBoldText(
                               Theme.of(context).colorScheme.surface,
                             ),
@@ -139,7 +189,14 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
                 borderRadius: BorderRadius.circular(20).r,
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PaidOrderScreen(total: total),
+                ),
+              );
+            },
             child: Text(
               'Continue',
               style: FontStyles.smallboldText(
