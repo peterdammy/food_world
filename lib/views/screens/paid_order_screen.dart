@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_world/views/screens/feedback_screen.dart';
+import 'package:food_world/views/screens/home_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 
 class PaidOrderScreen extends ConsumerStatefulWidget {
@@ -31,7 +34,10 @@ class _PaidOrderScreenState extends ConsumerState<PaidOrderScreen> {
                       height: 429,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.surface,
+                        boxShadow: [
+                          BoxShadow(offset: Offset(0, 4), blurRadius: 4.0.r),
+                        ],
                         borderRadius: BorderRadius.circular(12).r,
                       ),
                       child: Padding(
@@ -52,13 +58,13 @@ class _PaidOrderScreenState extends ConsumerState<PaidOrderScreen> {
                                 Text(
                                   'Order ID',
                                   style: FontStyles.smallerText(
-                                    Theme.of(context).colorScheme.secondary,
+                                    Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                                 Text(
                                   '1618HO',
                                   style: FontStyles.smallText(
-                                    Theme.of(context).colorScheme.surface,
+                                    Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               ],
@@ -70,13 +76,13 @@ class _PaidOrderScreenState extends ConsumerState<PaidOrderScreen> {
                                 Text(
                                   'Pay',
                                   style: FontStyles.smallerText(
-                                    Theme.of(context).colorScheme.secondary,
+                                    Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                                 Text(
                                   "₹ ${widget.total.toStringAsFixed(2)}",
                                   style: FontStyles.smallText(
-                                    Theme.of(context).colorScheme.surface,
+                                    Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               ],
@@ -88,19 +94,29 @@ class _PaidOrderScreenState extends ConsumerState<PaidOrderScreen> {
                                 Text(
                                   'Pay Date',
                                   style: FontStyles.smallerText(
-                                    Theme.of(context).colorScheme.secondary,
+                                    Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                                 Text(
                                   'May 7, 2025',
                                   style: FontStyles.smallText(
-                                    Theme.of(context).colorScheme.surface,
+                                    Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               ],
                             ),
-                            40.verticalSpace,
-                            Text('Total Pay'),
+                            50.verticalSpace,
+                            Text(
+                              'Total Pay',
+                              style: FontStyles.smallerText(
+                                Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            10.verticalSpace,
+                            Text(
+                              '₹ ${widget.total.toStringAsFixed(2)}',
+                              style: FontStyles.textfieldText,
+                            ),
                           ],
                         ),
                       ),
@@ -116,6 +132,23 @@ class _PaidOrderScreenState extends ConsumerState<PaidOrderScreen> {
                         ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              16.verticalSpace,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FeedbackScreen()),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset('assets/icon/feedback.svg'),
+                    5.horizontalSpace,
+                    Text('Give Feedback', style: FontStyles.loginhintText),
                   ],
                 ),
               ),
@@ -135,7 +168,12 @@ class _PaidOrderScreenState extends ConsumerState<PaidOrderScreen> {
                 borderRadius: BorderRadius.circular(20).r,
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            },
             child: Text(
               'View Menu',
               style: FontStyles.smallboldText(

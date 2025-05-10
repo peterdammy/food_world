@@ -55,6 +55,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     10.verticalSpace,
                     TextFormField(
                       controller: emailController,
+                      enableSuggestions: true,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Theme.of(context).colorScheme.primary,
@@ -81,6 +82,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     10.verticalSpace,
                     TextFormField(
                       controller: passwordController,
+                      enableSuggestions: true,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Theme.of(context).colorScheme.primary,
@@ -138,7 +140,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         },
                       );
 
-                      if (email.isEmpty || password.isEmpty) {
+                      if (email.isEmpty ||
+                          password.isEmpty ||
+                          !email.contains('@') ||
+                          password.length < 6) {
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
