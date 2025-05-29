@@ -19,6 +19,8 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = ref.watch(themeProvider);
+    final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
     final userEmail = ref.watch(authUserProvider).value;
     final profileOptionsList = ref.watch(profileOptionsProvider);
 
@@ -206,17 +208,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                 ),
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    ref.read(themeProvider.notifier).toggleTheme();
-                  },
-                  child: Text(
-                    'Switch Mode',
-                    style: FontStyles.smallerText(
-                      Theme.of(context).colorScheme.secondary,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0).h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Switch Mode',
+                        style: FontStyles.smallerText(
+                          Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
                     ),
-                  ),
+                    Switch(
+                      value: isDarkMode,
+                      onChanged: (value) async {
+                        ref.read(themeProvider.notifier).toggleTheme();
+                      },
+                    ),
+                  ],
                 ),
               ),
               // ListView.separated(
