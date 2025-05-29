@@ -219,6 +219,50 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                   ),
                 ),
+                16.verticalSpace,
+                Container(
+                  height: 57.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 1.5.w,
+                    ),
+                    borderRadius: BorderRadius.circular(20).r,
+                  ),
+                  child: Row(
+                    children: [
+                      20.horizontalSpace,
+                      Container(
+                        height: 40.h,
+                        width: 40.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40).r,
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.asset(
+                          'assets/images/google.png',
+                          height: 30.h,
+                          width: 30.w,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      20.horizontalSpace,
+                      Text(
+                        'Sign Up with Google',
+                        style: FontStyles.mediumText(
+                          Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                20.verticalSpace,
+                Text(
+                  'By clicking continue, you agree to our Terms of Service and Privacy Policy',
+                  style: FontStyles.loginhintText,
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),

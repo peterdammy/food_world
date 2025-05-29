@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_world/model/personal_info_model.dart';
 
 class AuthRepository {
   FirebaseAuth firebaseAuth;
@@ -43,5 +45,41 @@ class AuthRepository {
 
   Future<void> signOut() async {
     await firebaseAuth.signOut();
+  }
+
+  addUserDataToFireStore({
+    required String instagramUsername,
+    required String email,
+    required String phoneNumber,
+    required String location,
+    required String bio,
+  }) async {
+    final firestore = FirebaseFirestore.instance;
+
+    PersonalInfoModel personalInfoModel = PersonalInfoModel(
+      email: email,
+      phoneNumber: phoneNumber,
+      location: location,
+      bio: bio,
+      instagramUsername: instagramUsername,
+    );
+
+    await firestore
+        .collection('users')
+        .doc(firebaseAuth.currentUser!.uid)
+        .set(personalInfoModel.toMap());
+  }
+
+  Future<PersonalInfoModel> fetchUserDataFromFireStore() async {
+    final firestore = FirebaseFirestore.instance;
+    final currentUser =
+        await firestore
+            .collection('users')
+            .doc(firebaseAuth.currentUser!.uid)
+            .get();
+    PersonalInfoModel personalInfoModel = PersonalInfoModel.fromMap(
+      currentUser.data()!,
+    );
+    return personalInfoModel;
   }
 }
