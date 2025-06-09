@@ -3,18 +3,49 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_world/model/personal_info_model.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepository {
   FirebaseAuth firebaseAuth;
-  AuthRepository({required this.firebaseAuth});
+  GoogleSignIn googleSignIn;
 
+  AuthRepository({required this.firebaseAuth, required this.googleSignIn});
+
+  // Google Sign-In
+  Future<User?> signInWithGoogle() async {
+    final user = await googleSignIn.signIn();
+    if (user == null) return null;
+
+    final googleAuth = await user.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final userCredential = await firebaseAuth.signInWithCredential(credential);
+    final firebaseUser = userCredential.user;
+
+    if (firebaseUser != null) {
+      await _createUserDocumentIfNeeded(firebaseUser);
+    }
+
+    return firebaseUser;
+  }
+
+  // Email/Password Sign-Up
   Future<String?> signUpWithEmail(String email, String password) async {
     try {
-      await firebaseAuth.createUserWithEmailAndPassword(
+      final userCredential = await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return null; // success
+
+      final firebaseUser = userCredential.user;
+      if (firebaseUser != null) {
+        await _createUserDocumentIfNeeded(firebaseUser);
+      }
+
+      return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         return 'This email is already in use.';
@@ -30,56 +61,91 @@ class AuthRepository {
     }
   }
 
+  // Email/Password Sign-In
   Future<User?> signInWithEmail(String email, String password) async {
     try {
-      final result = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final result = await firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return result.user;
-    } on FirebaseAuthException catch (e) {
-      // Optional: log or handle different error codes
+
+      final firebaseUser = result.user;
+      if (firebaseUser != null) {
+        await _createUserDocumentIfNeeded(firebaseUser);
+      }
+
+      return firebaseUser;
+    } on FirebaseAuthException catch (_) {
       return null;
     }
   }
 
+  // Sign Out
   Future<void> signOut() async {
     await firebaseAuth.signOut();
   }
 
-  addUserDataToFireStore({
+  // Create Firestore user document if it doesn’t exist
+  Future<void> _createUserDocumentIfNeeded(User firebaseUser) async {
+    final userDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseUser.uid);
+    final doc = await userDoc.get();
+
+    if (!doc.exists) {
+      await userDoc.set(
+        PersonalInfoModel(
+          email: firebaseUser.email ?? '',
+          phoneNumber: '',
+          location: '',
+          bio: '',
+          instagramUsername: '',
+        ).toMap(),
+      );
+    }
+  }
+
+  //If you want to add/update Firestore user data
+  Future<bool> addUserDataToFireStore({
     required String instagramUsername,
     required String email,
     required String phoneNumber,
     required String location,
     required String bio,
   }) async {
-    final firestore = FirebaseFirestore.instance;
+    try {
+      final user = firebaseAuth.currentUser;
 
-    PersonalInfoModel personalInfoModel = PersonalInfoModel(
-      email: email,
-      phoneNumber: phoneNumber,
-      location: location,
-      bio: bio,
-      instagramUsername: instagramUsername,
-    );
+      if (user == null) return false;
 
-    await firestore
-        .collection('users')
-        .doc(firebaseAuth.currentUser!.uid)
-        .set(personalInfoModel.toMap());
+      final personalInfoModel = PersonalInfoModel(
+        email: email,
+        phoneNumber: phoneNumber,
+        location: location,
+        bio: bio,
+        instagramUsername: instagramUsername,
+      );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .set(personalInfoModel.toMap(), SetOptions(merge: true));
+
+      return true;
+    } catch (e) {
+      print("❌ Firestore update error: $e");
+      return false;
+    }
   }
 
+  // Fetch Firestore user data
   Future<PersonalInfoModel> fetchUserDataFromFireStore() async {
-    final firestore = FirebaseFirestore.instance;
-    final currentUser =
-        await firestore
+    final doc =
+        await FirebaseFirestore.instance
             .collection('users')
             .doc(firebaseAuth.currentUser!.uid)
             .get();
-    PersonalInfoModel personalInfoModel = PersonalInfoModel.fromMap(
-      currentUser.data()!,
-    );
-    return personalInfoModel;
+
+    return PersonalInfoModel.fromMap(doc.data()!);
   }
 }

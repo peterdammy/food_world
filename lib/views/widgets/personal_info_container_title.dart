@@ -6,11 +6,13 @@ import 'package:food_world/views/widgets/bio_container.dart';
 class PersonalInfoContainerTitle extends StatelessWidget {
   final Icon titleIcon;
   final String titleText;
+  final TextEditingController controller;
   const PersonalInfoContainerTitle({
     super.key,
     required this.customBuilder,
     required this.titleIcon,
     required this.titleText,
+    required this.controller,
   });
 
   final InputCounterWidgetBuilder? customBuilder;
@@ -33,7 +35,7 @@ class PersonalInfoContainerTitle extends StatelessWidget {
               ),
             ],
           ),
-          BioContainer(customBuilder: customBuilder),
+          BioContainer(customBuilder: customBuilder, controller: controller),
         ],
       ),
     );

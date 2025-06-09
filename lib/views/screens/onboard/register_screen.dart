@@ -29,7 +29,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                52.verticalSpace,
                 Text(
                   'Register',
                   style: FontStyles.largerText(
@@ -220,41 +219,70 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                 ),
                 16.verticalSpace,
-                Container(
-                  height: 57.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 1.5.w,
+                GestureDetector(
+                  onTap: () async {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Center(child: CircularProgressIndicator());
+                      },
+                    );
+                    final user =
+                        await ref.read(authServiceProvider).signInWithGoogle();
+
+                    Navigator.pop(context);
+
+                    if (user != null) {
+                      // Sign-in was successful
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                      );
+                    } else {
+                      // Sign-in failed or canceled
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Google Sign-Up failed")),
+                      );
+                    }
+                  },
+                  child: Container(
+                    height: 57.h,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 1.5.w,
+                      ),
+                      borderRadius: BorderRadius.circular(20).r,
                     ),
-                    borderRadius: BorderRadius.circular(20).r,
-                  ),
-                  child: Row(
-                    children: [
-                      20.horizontalSpace,
-                      Container(
-                        height: 40.h,
-                        width: 40.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40).r,
+                    child: Row(
+                      children: [
+                        20.horizontalSpace,
+                        Container(
+                          height: 40.h,
+                          width: 40.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40).r,
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          child: Image.asset(
+                            'assets/images/google.png',
+                            height: 30.h,
+                            width: 30.w,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        clipBehavior: Clip.hardEdge,
-                        child: Image.asset(
-                          'assets/images/google.png',
-                          height: 30.h,
-                          width: 30.w,
-                          fit: BoxFit.cover,
+                        20.horizontalSpace,
+                        Text(
+                          'Sign Up with Google',
+                          style: FontStyles.mediumText(
+                            Theme.of(context).colorScheme.secondary,
+                          ),
                         ),
-                      ),
-                      20.horizontalSpace,
-                      Text(
-                        'Sign Up with Google',
-                        style: FontStyles.mediumText(
-                          Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 20.verticalSpace,

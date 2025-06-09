@@ -8,6 +8,7 @@ class PersonalInfoContent extends StatefulWidget {
   final String hintText;
   final IconButton? suffixIcon;
   final bool obscureText;
+  final TextEditingController controller;
 
   const PersonalInfoContent({
     super.key,
@@ -16,6 +17,7 @@ class PersonalInfoContent extends StatefulWidget {
     required this.titleText,
     this.suffixIcon,
     required this.obscureText,
+    required this.controller,
   });
 
   @override
@@ -43,6 +45,7 @@ class _PersonalInfoContentState extends State<PersonalInfoContent> {
             ],
           ),
           TextField(
+            controller: widget.controller,
             obscureText: widget.obscureText,
             decoration: InputDecoration(
               filled: true,

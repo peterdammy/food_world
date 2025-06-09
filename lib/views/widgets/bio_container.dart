@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BioContainer extends StatelessWidget {
-  const BioContainer({super.key, this.customBuilder});
+  const BioContainer({super.key, this.customBuilder, this.controller});
 
   final InputCounterWidgetBuilder? customBuilder;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
