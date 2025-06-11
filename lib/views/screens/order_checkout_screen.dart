@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_world/model/recent_order_model.dart';
+import 'package:food_world/provider/auth_recent_order_provider.dart';
+import 'package:food_world/provider/auth_user_provider.dart';
 import 'package:food_world/provider/menu_quantity_provider.dart';
+import 'package:food_world/provider/recent_order_provider.dart';
 import 'package:food_world/provider/selected_provider.dart';
 import 'package:food_world/views/screens/paid_order_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
@@ -217,15 +221,36 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
               ),
             ),
             onPressed: () {
-              final selected = ref.read(selectedPaymentProvider);
-              print("Selected payment method index: $selected");
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PaidOrderScreen(total: total),
-                ),
-              );
+              final user = ref.read(authUserProvider).value;
+              if (user != null) {
+                final orderId =
+                    DateTime.now().millisecondsSinceEpoch.toString();
+                final payDate = DateTime.now().toString().substring(0, 10);
+
+                ref
+                    .read(recentOrderProvider(user.uid).notifier)
+                    .addRecentOrder(
+                      RecentOrderModel(
+                        orderId: orderId,
+                        amount: total,
+                        payDate: payDate,
+                        isCompleted: true,
+                      ),
+                    );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaidOrderScreen(total: total),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text("User not signed in")));
+              }
             },
+
             child: Text(
               'Pay',
               style: FontStyles.smallboldText(

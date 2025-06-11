@@ -12,13 +12,15 @@ class RecommendedCarousel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final foodCarouselContent = ref.watch(foodCarouselProvider);
     return SizedBox(
-      height: 180.h,
+      height: 200.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        separatorBuilder: (context, index) => 12.horizontalSpace,
+        itemCount: foodCarouselContent.length,
         itemBuilder: (context, index) {
           return Container(
-            height: 160.h,
-            width: 104.w,
+            height: 170.h,
+            width: 280.w,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(20).r,
@@ -35,21 +37,21 @@ class RecommendedCarousel extends ConsumerWidget {
                   left: 10.w,
                 ),
                 Positioned(
-                  left: 7.w,
-                  bottom: 7.h,
+                  left: 10.w,
+                  bottom: 10.h,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         foodCarouselContent[index].foodTitle,
-                        style: FontStyles.smallerBoldText(Colors.white),
+                        style: FontStyles.medium2Text(Colors.white),
                       ),
                       5.verticalSpace,
                       Row(
                         children: [
                           Text(
                             foodCarouselContent[index].numberofMins,
-                            style: FontStyles.smallestText(Colors.white),
+                            style: FontStyles.smallerText(Colors.white),
                           ),
                           2.horizontalSpace,
                           Text(
@@ -59,7 +61,7 @@ class RecommendedCarousel extends ConsumerWidget {
                           2.horizontalSpace,
                           Text(
                             foodCarouselContent[index].numberofServing,
-                            style: FontStyles.smallestText(Colors.white),
+                            style: FontStyles.smallerText(Colors.white),
                           ),
                         ],
                       ),
@@ -70,9 +72,71 @@ class RecommendedCarousel extends ConsumerWidget {
             ),
           );
         },
-        separatorBuilder: (context, index) => 12.horizontalSpace,
-        itemCount: 6,
       ),
     );
   }
+
+  // return SizedBox(
+  //   height: 180.h,
+  //   child: ListView.separated(
+  //     scrollDirection: Axis.horizontal,
+  //     itemBuilder: (context, index) {
+  //       return Container(
+  //         height: 160.h,
+  //         width: 104.w,
+  //         decoration: BoxDecoration(
+  //           color: Theme.of(context).colorScheme.primary,
+  //           borderRadius: BorderRadius.circular(20).r,
+  //           image: DecorationImage(
+  //             image: AssetImage(foodCarouselContent[index].backgroundImage),
+  //             fit: BoxFit.cover,
+  //           ),
+  //         ),
+  //         child: Stack(
+  //           children: [
+  //             Positioned(
+  //               child: SvgPicture.asset('assets/icon/favorite.svg'),
+  //               top: 10.h,
+  //               left: 10.w,
+  //             ),
+  //             Positioned(
+  //               left: 7.w,
+  //               bottom: 7.h,
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     foodCarouselContent[index].foodTitle,
+  //                     style: FontStyles.smallerBoldText(Colors.white),
+  //                   ),
+  //                   5.verticalSpace,
+  //                   Row(
+  //                     children: [
+  //                       Text(
+  //                         foodCarouselContent[index].numberofMins,
+  //                         style: FontStyles.smallestText(Colors.white),
+  //                       ),
+  //                       2.horizontalSpace,
+  //                       Text(
+  //                         "|",
+  //                         style: FontStyles.smallestText(Colors.white),
+  //                       ),
+  //                       2.horizontalSpace,
+  //                       Text(
+  //                         foodCarouselContent[index].numberofServing,
+  //                         style: FontStyles.smallestText(Colors.white),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //     separatorBuilder: (context, index) => 12.horizontalSpace,
+  //     itemCount: 6,
+  //   ),
+  // );
 }

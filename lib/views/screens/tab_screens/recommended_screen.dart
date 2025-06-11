@@ -22,9 +22,17 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
     return SingleChildScrollView(
       child: Expanded(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Hot Deals This Week!!!',
+              style: FontStyles.medium2Text(
+                Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            14.verticalSpace,
             RecommendedCarousel(),
-            30.verticalSpace,
+            20.verticalSpace,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

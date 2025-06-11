@@ -1,36 +1,51 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_world/model/recent_order_model.dart';
 
-final List<RecentOrderModel> recentOrderModel = [
-  RecentOrderModel(
-    orderId: '1618H0',
-    amount: 252.52,
-    payDate: 'July 11, 2022',
-    isCompleted: false,
-  ),
+class RecentOrderNotifier extends StateNotifier<List<RecentOrderModel>> {
+  RecentOrderNotifier(this.uid) : super([]) {
+    loadRecentOrdersFromFirebase(uid);
+  }
 
-  RecentOrderModel(
-    orderId: '1238JK',
-    amount: 20.00,
-    payDate: 'July 1, 2022',
-    isCompleted: true,
-  ),
+  final String uid;
+  final _firestore = FirebaseFirestore.instance;
 
-  RecentOrderModel(
-    orderId: '3100  HG',
-    amount: 152.23,
-    payDate: 'June 20, 2022',
-    isCompleted: true,
-  ),
+  Future<void> addRecentOrder(RecentOrderModel order) async {
+    state = [...state, order];
+    await _firestore.collection('recent_orders').add({
+      'orderId': order.orderId,
+      'amount': order.amount,
+      'payDate': order.payDate,
+      'isCompleted': order.isCompleted,
+      'uid': uid,
+    });
+  }
 
-  RecentOrderModel(
-    orderId: '1425SA',
-    amount: 100.79,
-    payDate: 'may 30, 2022',
-    isCompleted: true,
-  ),
-];
+  Future<void> loadRecentOrdersFromFirebase(String uid) async {
+    final snapshot =
+        await _firestore
+            .collection('recent_orders')
+            .where('uid', isEqualTo: uid)
+            .get();
 
-final recentOrderProvider = Provider((ref) {
-  return recentOrderModel;
-});
+    final orders =
+        snapshot.docs.map((doc) {
+          final data = doc.data();
+          return RecentOrderModel(
+            orderId: data['orderId'],
+            amount: (data['amount'] as num).toDouble(),
+            payDate: data['payDate'],
+            isCompleted: data['isCompleted'] ?? true,
+          );
+        }).toList();
+
+    state = orders;
+  }
+
+  void deleteRecentOrder(String orderId) {
+    state = [
+      for (final order in state)
+        if (order.orderId != orderId) order,
+    ];
+  }
+}

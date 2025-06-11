@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_world/provider/food_carousel_provider.dart';
 import 'package:food_world/provider/menu_quantity_provider.dart';
+import 'package:food_world/provider/user_provider.dart';
 import 'package:food_world/views/screens/order_checkout_screen.dart';
 import 'package:food_world/views/screens/profile_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
@@ -44,6 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final foodCarouselContent = ref.watch(foodCarouselProvider).toSet();
+    final currentUserAsync = ref.watch(currentUserProvider);
 
     return DefaultTabController(
       length: 7,
@@ -62,11 +64,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Hi, Guest',
-                            style: FontStyles.medium2Text(
-                              Theme.of(context).colorScheme.secondary,
-                            ),
+                          currentUserAsync.when(
+                            loading:
+                                () =>
+                                    CircularProgressIndicator(), // or Shimmer if you prefer
+                            error:
+                                (err, stack) => Text('Error loading user info'),
+                            data:
+                                (currentUser) => Row(
+                                  children: [
+                                    Text(
+                                      "Hi, ${currentUser.instagramUsername}", // Fallback if username is null
+                                      style: FontStyles.medium2Text(
+                                        Theme.of(context).colorScheme.secondary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                           ),
                           GestureDetector(
                             onTap: () {

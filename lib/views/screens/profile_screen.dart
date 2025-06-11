@@ -6,6 +6,7 @@ import 'package:food_world/provider/auth_provider.dart';
 import 'package:food_world/provider/auth_user_provider.dart';
 import 'package:food_world/provider/profile_provider.dart';
 import 'package:food_world/provider/theme_provider.dart';
+import 'package:food_world/provider/user_provider.dart';
 import 'package:food_world/views/screens/onboard/onboard_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 
@@ -23,6 +24,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
     final userEmail = ref.watch(authUserProvider).value;
     final profileOptionsList = ref.watch(profileOptionsProvider);
+
+    final currentUserAsync = ref.watch(currentUserProvider);
 
     void _showLogoutDialog(BuildContext context) {
       showDialog(
@@ -49,9 +52,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               TextButton(
                 onPressed: () {
                   ref.read(authServiceProvider).signOut();
-                  Navigator.push(
+
+                  // Invalidate related providers
+                  ref.invalidate(authUserProvider);
+                  ref.invalidate(
+                    currentUserProvider,
+                  ); // 👈 Force reload for new user
+
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => OnboardScreen()),
+                    (route) => false,
                   );
                 },
                 child: Text(
@@ -149,11 +160,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
               8.verticalSpace,
-              Text(
-                'Guest',
-                style: FontStyles.medium2Text(
-                  Theme.of(context).colorScheme.secondary,
-                ),
+              currentUserAsync.when(
+                loading:
+                    () =>
+                        CircularProgressIndicator(), // or Shimmer if you prefer
+                error: (err, stack) => Text('Error loading user info'),
+                data:
+                    (currentUser) => Text(
+                      currentUser.instagramUsername ?? 'Guest',
+                      style: FontStyles.medium2Text(
+                        Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
               ),
               4.verticalSpace,
               Text(

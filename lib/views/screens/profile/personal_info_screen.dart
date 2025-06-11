@@ -259,6 +259,9 @@ class _PersonalInfoScreenState extends ConsumerState<PersonalInfoScreen> {
                           );
 
                       if (success) {
+                        ref.invalidate(
+                          currentUserProvider,
+                        ); // 🚀 Force reload for new/updated user
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text("✅ Profile updated successfully"),

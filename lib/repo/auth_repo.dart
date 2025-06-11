@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_world/model/personal_info_model.dart';
+import 'package:food_world/provider/auth_user_provider.dart';
+import 'package:food_world/provider/user_provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepository {
@@ -83,6 +85,7 @@ class AuthRepository {
   // Sign Out
   Future<void> signOut() async {
     await firebaseAuth.signOut();
+    await googleSignIn.signOut();
   }
 
   // Create Firestore user document if it doesn’t exist
