@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_world/provider/menu_quantity_provider.dart';
+import 'package:food_world/provider/selected_provider.dart';
 import 'package:food_world/views/screens/paid_order_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 import 'package:food_world/views/widgets/payment_container.dart';
@@ -16,6 +17,7 @@ class OrderCheckoutScreen extends ConsumerStatefulWidget {
 
 class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
   final deliveryCharge = 30.00;
+
   @override
   Widget build(BuildContext context) {
     final cartItems = ref.watch(menuProvider).where((e) => e.isAdded);
@@ -25,6 +27,8 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
     );
     final total = subtotal + deliveryCharge;
 
+    final selectedIndex = ref.watch(selectedPaymentProvider);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
@@ -33,6 +37,7 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// AppBar
               Row(
                 children: [
                   Container(
@@ -48,9 +53,7 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
                     child: Center(
                       child: IconButton(
                         padding: EdgeInsets.zero,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: () => Navigator.pop(context),
                         icon: Icon(
                           Icons.arrow_back_ios,
                           color: Theme.of(context).colorScheme.secondary,
@@ -68,21 +71,40 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
                   ),
                 ],
               ),
+
               30.verticalSpace,
-              PaymentContainer(
-                svgPicture: 'assets/icon/visacard.svg',
-                svgPicture2: 'assets/icon/mastercard.svg',
+
+              /// Payment Methods (selectable)
+              GestureDetector(
+                onTap:
+                    () => ref.read(selectedPaymentProvider.notifier).state = 0,
+                child: PaymentContainer(
+                  svgPicture: 'assets/icon/visacard.svg',
+                  svgPicture2: 'assets/icon/mastercard.svg',
+                  isSelected: selectedIndex == 0,
+                ),
               ),
               16.verticalSpace,
-              PaymentContainer(
-                svgPicture: 'assets/icon/googlepay.svg',
-                svgPicture2: 'assets/icon/applepay.svg',
+              GestureDetector(
+                onTap:
+                    () => ref.read(selectedPaymentProvider.notifier).state = 1,
+                child: PaymentContainer(
+                  svgPicture: 'assets/icon/googlepay.svg',
+                  svgPicture2: 'assets/icon/applepay.svg',
+                  isSelected: selectedIndex == 1,
+                ),
               ),
               16.verticalSpace,
-              PaymentContainer(
-                svgPicture: 'assets/icon/paypal.svg',
-                svgPicture2: '',
+              GestureDetector(
+                onTap:
+                    () => ref.read(selectedPaymentProvider.notifier).state = 2,
+                child: PaymentContainer(
+                  svgPicture: 'assets/icon/paypal.svg',
+                  svgPicture2: '',
+                  isSelected: selectedIndex == 2,
+                ),
               ),
+
               4.verticalSpace,
               TextButton(
                 onPressed: () {},
@@ -91,7 +113,10 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
                   style: FontStyles.loginhintText,
                 ),
               ),
+
               20.verticalSpace,
+
+              /// Order Summary
               Container(
                 height: 214.h,
                 width: double.infinity,
@@ -177,6 +202,8 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
           ),
         ),
       ),
+
+      /// Continue Button
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0).w,
         child: SizedBox(
@@ -190,6 +217,8 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
               ),
             ),
             onPressed: () {
+              final selected = ref.read(selectedPaymentProvider);
+              print("Selected payment method index: $selected");
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -198,7 +227,7 @@ class _OrderCheckoutScreenState extends ConsumerState<OrderCheckoutScreen> {
               );
             },
             child: Text(
-              'Continue',
+              'Pay',
               style: FontStyles.smallboldText(
                 Theme.of(context).colorScheme.surface,
               ),

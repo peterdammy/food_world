@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_world/provider/food_carousel_provider.dart';
 import 'package:food_world/provider/menu_quantity_provider.dart';
 import 'package:food_world/views/styles/font_styles.dart';
 import 'package:food_world/views/widgets/recommended_carousel.dart';
@@ -15,6 +16,8 @@ class RecommendedScreen extends ConsumerStatefulWidget {
 class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
   @override
   Widget build(BuildContext context) {
+    final foodCarouselContent = ref.watch(foodCarouselProvider);
+
     final menuItems = ref.watch(menuProvider);
     return SingleChildScrollView(
       child: Expanded(
@@ -54,25 +57,44 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              child: Row(
                                 children: [
-                                  Text(
-                                    'lorem ipsum dolor sit',
-                                    style: FontStyles.smallestItalicText(
-                                      Theme.of(context).colorScheme.primary,
+                                  CircleAvatar(
+                                    radius: 25.r,
+                                    backgroundImage: AssetImage(
+                                      foodCarouselContent[index]
+                                          .backgroundImage,
                                     ),
                                   ),
-                                  Text(
-                                    menu.name,
-                                    style: FontStyles.smallerBoldText(
-                                      Theme.of(context).colorScheme.secondary,
-                                    ),
-                                  ),
-                                  Text(
-                                    "${menu.price.toStringAsFixed(2)} ₹",
-                                    style: FontStyles.smallerText(Colors.green),
+                                  10.horizontalSpace,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      // Text(
+                                      //   'lorem ipsum dolor sit',
+                                      //   style: FontStyles.smallestItalicText(
+                                      //     Theme.of(context).colorScheme.primary,
+                                      //   ),
+                                      // ),
+                                      Text(
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        foodCarouselContent[index].foodTitle,
+                                        style: FontStyles.smallerBoldText(
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
+                                        ),
+                                      ),
+                                      Text(
+                                        "${menu.price.toStringAsFixed(2)} ₹",
+                                        style: FontStyles.smallerText(
+                                          Colors.green,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -83,34 +105,6 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   // crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        ref
-                                            .read(menuProvider.notifier)
-                                            .decreaseQuantity(index);
-                                      },
-                                      child: CircleAvatar(
-                                        radius: 6.5.r,
-                                        backgroundColor:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.secondary,
-                                        child: Icon(
-                                          Icons.remove,
-                                          size: 8.w,
-                                          color:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.surface,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      '${menu.quantity}',
-                                      style: FontStyles.smallerText(
-                                        Theme.of(context).colorScheme.secondary,
-                                      ),
-                                    ),
                                     GestureDetector(
                                       onTap: () {
                                         ref
@@ -126,6 +120,35 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
                                             ).colorScheme.secondary,
                                         child: Icon(
                                           Icons.add,
+                                          size: 8.w,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.surface,
+                                        ),
+                                      ),
+                                    ),
+
+                                    Text(
+                                      '${menu.quantity}',
+                                      style: FontStyles.smallerText(
+                                        Theme.of(context).colorScheme.secondary,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        ref
+                                            .read(menuProvider.notifier)
+                                            .decreaseQuantity(index);
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 6.5.r,
+                                        backgroundColor:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.secondary,
+                                        child: Icon(
+                                          Icons.remove,
                                           size: 8.w,
                                           color:
                                               Theme.of(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_world/provider/food_carousel_provider.dart';
 import 'package:food_world/provider/menu_quantity_provider.dart';
 import 'package:food_world/views/screens/order_checkout_screen.dart';
 import 'package:food_world/views/screens/profile_screen.dart';
@@ -16,8 +17,34 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController();
+
+  bool _isExpanded = false;
+
+  void _toggleSheet() {
+    if (_isExpanded) {
+      _sheetController.animateTo(
+        0.1,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      _sheetController.animateTo(
+        0.5,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+    setState(() {
+      _isExpanded = !_isExpanded;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final foodCarouselContent = ref.watch(foodCarouselProvider).toSet();
+
     return DefaultTabController(
       length: 7,
       child: Scaffold(
@@ -70,9 +97,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
               // Bottom Sheet
               DraggableScrollableSheet(
-                initialChildSize: 0.1, // collapsed size
+                controller: _sheetController,
+                initialChildSize: 0.1,
                 minChildSize: 0.1,
-                maxChildSize: 0.5, // expanded size
+                maxChildSize: 0.5,
                 builder: (context, scrollController) {
                   return Container(
                     decoration: BoxDecoration(
@@ -95,39 +123,57 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 Theme.of(context).colorScheme.surface,
                               ),
                             ),
-                            Icon(
-                              Icons.expand_more,
-                              color: Theme.of(context).colorScheme.surface,
+                            IconButton(
+                              icon: Icon(
+                                _isExpanded
+                                    ? Icons.expand_more
+                                    : Icons.expand_less, // Toggle icon
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                              onPressed: _toggleSheet,
                             ),
                           ],
                         ),
                         12.verticalSpace,
                         ...ref
                             .watch(menuProvider)
-                            .where((item) => item.isAdded)
-                            .map(
-                              (item) => Padding(
+                            .asMap()
+                            .entries
+                            .where((entry) => entry.value.isAdded)
+                            .map((entry) {
+                              final index = entry.key;
+                              final item = entry.value;
+
+                              // Get food title from foodCarouselProvider by index
+                              final foodTitle =
+                                  ref.watch(foodCarouselProvider).length > index
+                                      ? ref
+                                          .watch(foodCarouselProvider)[index]
+                                          .foodTitle
+                                      : 'Food Item';
+
+                              return Padding(
                                 padding: EdgeInsets.symmetric(vertical: 4.h),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      item.name,
+                                      foodTitle,
                                       style: FontStyles.smallText(
                                         Theme.of(context).colorScheme.surface,
                                       ),
                                     ),
                                     Text(
-                                      "${item.price.toStringAsFixed(2)} ₹",
+                                      "${(item.price * item.quantity).toStringAsFixed(2)} ₹",
                                       style: FontStyles.smallText(
                                         Theme.of(context).colorScheme.surface,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                         16.verticalSpace,
                         Container(
                           height: 60.h,
@@ -141,7 +187,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Total: ${ref.watch(menuProvider).where((e) => e.isAdded).fold(0.0, (sum, e) => sum + (e.price * e.quantity))} ₹",
+                                "Total: ${ref.watch(menuProvider).where((e) => e.isAdded).fold(0.0, (sum, e) => sum + (e.price * e.quantity)).toStringAsFixed(2)} ₹",
                                 style: FontStyles.medium2Text(
                                   Theme.of(context).colorScheme.secondary,
                                 ),

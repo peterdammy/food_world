@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_world/provider/menu_quantity_provider.dart';
 import 'package:food_world/views/screens/feedback_screen.dart';
 import 'package:food_world/views/screens/home_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
@@ -169,11 +170,17 @@ class _PaidOrderScreenState extends ConsumerState<PaidOrderScreen> {
               ),
             ),
             onPressed: () {
-              Navigator.push(
+              // Clear cart items first
+              ref.read(menuProvider.notifier).clearCart();
+
+              // Replace current screen stack with HomeScreen
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
+                (route) => false,
               );
             },
+
             child: Text(
               'View Menu',
               style: FontStyles.smallboldText(

@@ -34,6 +34,12 @@ class MenuNotifier extends StateNotifier<List<MenuItemModel>> {
     updated[index] = updated[index].copyWith(isAdded: !updated[index].isAdded);
     state = updated;
   }
+
+  void clearCart() {
+    state = [
+      for (final item in state) item.copyWith(isAdded: false, quantity: 0),
+    ];
+  }
 }
 
 final menuProvider = StateNotifierProvider<MenuNotifier, List<MenuItemModel>>(

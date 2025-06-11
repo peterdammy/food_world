@@ -5,11 +5,13 @@ import 'package:flutter_svg/svg.dart';
 class PaymentContainer extends StatelessWidget {
   final String svgPicture;
   final String svgPicture2;
+  final bool isSelected;
 
   const PaymentContainer({
     super.key,
     required this.svgPicture,
     required this.svgPicture2,
+    required this.isSelected,
   });
 
   @override
@@ -29,15 +31,27 @@ class PaymentContainer extends StatelessWidget {
           height: 25.h,
           width: 25.w,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(25).r,
+            border: Border.all(
+              color:
+                  isSelected
+                      ? Colors.green
+                      : Theme.of(context).colorScheme.primary,
+              width: 2,
+            ),
           ),
+          child:
+              isSelected
+                  ? Icon(Icons.check, size: 18, color: Colors.green)
+                  : null,
         ),
         title: Row(
           children: [
             SvgPicture.asset(svgPicture),
-            10.horizontalSpace,
-            SvgPicture.asset(svgPicture2),
+            if (svgPicture2.isNotEmpty) ...[
+              10.horizontalSpace,
+              SvgPicture.asset(svgPicture2),
+            ],
           ],
         ),
       ),
