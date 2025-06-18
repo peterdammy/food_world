@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_world/provider/food_carousel_provider.dart';
 import 'package:food_world/provider/menu_quantity_provider.dart';
 import 'package:food_world/provider/user_provider.dart';
+import 'package:food_world/views/screens/chat_screen.dart';
 import 'package:food_world/views/screens/order_checkout_screen.dart';
 import 'package:food_world/views/screens/profile_screen.dart';
 import 'package:food_world/views/styles/font_styles.dart';
@@ -82,21 +83,62 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ],
                                 ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChatScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  height: 52.h,
+                                  width: 52.w,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(52).r,
+                                    border: Border.all(
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 26.r,
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.primary,
+                                    child: Icon(
+                                      Icons.headset_mic_rounded,
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
+                                    ),
+                                  ),
                                 ),
-                              );
-                            },
-                            child: CircleAvatar(
-                              radius: 26.r,
-                              backgroundImage: AssetImage(
-                                'assets/images/avatar.png',
                               ),
-                            ),
+                              10.horizontalSpace,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfileScreen(),
+                                    ),
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  radius: 26.r,
+                                  backgroundImage: AssetImage(
+                                    'assets/images/avatar.png',
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

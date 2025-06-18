@@ -1,6 +1,8 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:food_world/provider/food_carousel_provider.dart';
 import 'package:food_world/provider/menu_quantity_provider.dart';
 import 'package:food_world/views/styles/font_styles.dart';
@@ -14,6 +16,22 @@ class RecommendedScreen extends ConsumerStatefulWidget {
 }
 
 class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
+  int currentCarousel = 0;
+  Widget carouselIndicator(int index) {
+    return Container(
+      height: 10.h,
+      width: 10.w,
+      margin: EdgeInsets.only(left: 5.w, right: 5.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10).r,
+        color:
+            currentCarousel == index
+                ? Colors.green
+                : Theme.of(context).colorScheme.primary,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final foodCarouselContent = ref.watch(foodCarouselProvider);
@@ -31,7 +49,83 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
               ),
             ),
             14.verticalSpace,
-            RecommendedCarousel(),
+            CarouselSlider.builder(
+              itemCount: foodCarouselContent.length,
+              itemBuilder: (context, index, realIndex) {
+                return Container(
+                  height: 170.h,
+                  width: 280.w,
+                  margin: EdgeInsets.only(left: 8, right: 8).w,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(20).r,
+                    image: DecorationImage(
+                      image: AssetImage(
+                        foodCarouselContent[index].backgroundImage,
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: 10.h,
+                        left: 10.w,
+                        child: SvgPicture.asset('assets/icon/favorite.svg'),
+                      ),
+                      Positioned(
+                        left: 10.w,
+                        bottom: 10.h,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              foodCarouselContent[index].foodTitle,
+                              style: FontStyles.medium2Text(Colors.white),
+                            ),
+                            5.verticalSpace,
+                            Row(
+                              children: [
+                                Text(
+                                  foodCarouselContent[index].numberofMins,
+                                  style: FontStyles.smallerText(Colors.white),
+                                ),
+                                2.horizontalSpace,
+                                Text(
+                                  "|",
+                                  style: FontStyles.smallestText(Colors.white),
+                                ),
+                                2.horizontalSpace,
+                                Text(
+                                  foodCarouselContent[index].numberofServing,
+                                  style: FontStyles.smallerText(Colors.white),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              options: CarouselOptions(
+                viewportFraction: 0.85,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    currentCarousel = index;
+                  });
+                },
+              ),
+            ),
+            12.verticalSpace,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(foodCarouselContent.length, (index) {
+                return carouselIndicator(index);
+              }),
+            ),
+
             20.verticalSpace,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

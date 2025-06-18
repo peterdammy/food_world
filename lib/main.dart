@@ -1,12 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_world/firebase_options.dart';
 import 'package:food_world/provider/theme_provider.dart';
-import 'package:food_world/views/screens/home_screen.dart';
-import 'package:food_world/views/screens/onboard/onboard_screen.dart';
+import 'package:food_world/views/screens/entry_point.dart';
 import 'package:food_world/views/styles/theme_styles.dart';
 
 void main() async {
@@ -34,16 +32,7 @@ class MyApp extends ConsumerWidget {
             darkTheme: darkMode,
             themeMode: themeStyle,
 
-            home: StreamBuilder(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return OnboardScreen();
-                } else {
-                  return HomeScreen();
-                }
-              },
-            ),
+            home: const EntryPoint(),
           ),
       designSize: const Size(375, 812),
       minTextAdapt: true,
